@@ -91,20 +91,8 @@
 
 
 
-<!-- Vector Map -->
-<link href="https://cdn.jsdelivr.net/npm/jsvectormap@1.5.3/dist/css/jsvectormap.min.css" rel="stylesheet" />
-
 <!-- Scrollbar Plugin -->
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/simplebar@6.2.5/dist/simplebar.min.css">
-
-<!-- ApexCharts CSS -->
-<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/apexcharts@latest/dist/apexcharts.css">
-
-<!-- Quill Editor -->
-<link href="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.snow.css" rel="stylesheet">
-
-<!-- Grid JS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gridjs/dist/theme/mermaid.min.css">
 
 <!-- Prism.js for code highlighting (theme loaded dynamically by admin-static.js) -->
 <link id="prism-theme-link" href="./assets/hui-prism.min.css" rel="stylesheet" />
@@ -114,19 +102,12 @@
 
 <!-- Form Enhancement CSS -->
 <!-- TinyMCE CSS is included in the editor itself -->
-<!-- Choices.js -->
-<link href="https://cdn.jsdelivr.net/npm/choices.js@10.1.0/public/assets/styles/choices.min.css" rel="stylesheet">
-<!-- Flatpickr -->
-<link href="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.css" rel="stylesheet">
-
 <!-- BS5 Lightbox - Image Modal Gallery -->
 <!-- Note: bs5-lightbox doesn't require a separate CSS file, it uses Bootstrap's modal/carousel styles -->
 
 <!-- FullCalendar CSS -->
 <!-- Note: FullCalendar CSS is typically included via themes or bundled with the main package -->
 
-<!-- xterm.js Terminal CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm@5.3.0/css/xterm.css">
     <!-- end plugins -->
 
     <!-- start vite CSS & JS -->
@@ -180,193 +161,7 @@
             }
         })();
     </script>
-<script id="browser-logger-active">
-(function() {
-    const ENDPOINT = 'http://localhost/_boost/browser-logs';
-    const logQueue = [];
-    let flushTimeout = null;
 
-    console.log('🔍 Browser logger active (MCP server detected). Posting to: ' + ENDPOINT);
-
-    // Store original console methods
-    const originalConsole = {
-        log: console.log,
-        info: console.info,
-        error: console.error,
-        warn: console.warn,
-        table: console.table
-    };
-
-    // Helper to safely stringify values
-    function safeStringify(obj) {
-        const seen = new WeakSet();
-        return JSON.stringify(obj, (key, value) => {
-            if (typeof value === 'object' && value !== null) {
-                if (seen.has(value)) return '[Circular]';
-                seen.add(value);
-            }
-            if (value instanceof Error) {
-                return {
-                    name: value.name,
-                    message: value.message,
-                    stack: value.stack
-                };
-            }
-            return value;
-        });
-    }
-
-    // Batch and send logs
-    function flushLogs() {
-        if (logQueue.length === 0) return;
-
-        const batch = logQueue.splice(0, logQueue.length);
-
-        fetch(ENDPOINT, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-Requested-With': 'XMLHttpRequest'
-            },
-            body: JSON.stringify({ logs: batch })
-        }).catch(err => {
-            // Silently fail to avoid infinite loops
-            originalConsole.error('Failed to send logs:', err);
-        });
-    }
-
-    // Debounced flush (100ms)
-    function scheduleFlush() {
-        if (flushTimeout) clearTimeout(flushTimeout);
-        flushTimeout = setTimeout(flushLogs, 100);
-    }
-
-    // Intercept console methods
-    ['log', 'info', 'error', 'warn', 'table'].forEach(method => {
-        console[method] = function(...args) {
-            // Call original method
-            originalConsole[method].apply(console, args);
-
-            // Capture log data
-            try {
-                logQueue.push({
-                    type: method,
-                    timestamp: new Date().toISOString(),
-                    data: args.map(arg => {
-                        try {
-                            return typeof arg === 'object' ? JSON.parse(safeStringify(arg)) : arg;
-                        } catch (e) {
-                            return String(arg);
-                        }
-                    }),
-                    url: window.location.href,
-                    userAgent: navigator.userAgent
-                });
-
-                scheduleFlush();
-            } catch (e) {
-                // Fail silently
-            }
-        };
-    });
-
-    // Global error handlers for uncaught errors
-    const originalOnError = window.onerror;
-    window.onerror = function boostErrorHandler(errorMsg, url, lineNumber, colNumber, error) {
-        try {
-            logQueue.push({
-                type: 'uncaught_error',
-                timestamp: new Date().toISOString(),
-                data: [{
-                    message: errorMsg,
-                    filename: url,
-                    lineno: lineNumber,
-                    colno: colNumber,
-                    error: error ? {
-                        name: error.name,
-                        message: error.message,
-                        stack: error.stack
-                    } : null
-                }],
-                url: window.location.href,
-                userAgent: navigator.userAgent
-            });
-
-            scheduleFlush();
-        } catch (e) {
-            // Fail silently
-        }
-
-        // Call original handler if it exists
-        if (originalOnError && typeof originalOnError === 'function') {
-            return originalOnError(errorMsg, url, lineNumber, colNumber, error);
-        }
-
-        // Let the error continue to propagate
-        return false;
-    }
-    window.addEventListener('error', (event) => {
-        try {
-            logQueue.push({
-                type: 'window_error',
-                timestamp: new Date().toISOString(),
-                data: [{
-                    message: event.message,
-                    filename: event.filename,
-                    lineno: event.lineno,
-                    colno: event.colno,
-                    error: event.error ? {
-                        name: event.error.name,
-                        message: event.error.message,
-                        stack: event.error.stack
-                    } : null
-                }],
-                url: window.location.href,
-                userAgent: navigator.userAgent
-            });
-
-            scheduleFlush();
-        } catch (e) {
-            // Fail silently
-        }
-
-        // Let the error continue to propagate
-        return false;
-    });
-    window.addEventListener('unhandledrejection', (event) => {
-        try {
-            logQueue.push({
-                type: 'error',
-                timestamp: new Date().toISOString(),
-                data: [{
-                    message: 'Unhandled Promise Rejection',
-                    reason: event.reason instanceof Error ? {
-                        name: event.reason.name,
-                        message: event.reason.message,
-                        stack: event.reason.stack
-                    } : event.reason
-                }],
-                url: window.location.href,
-                userAgent: navigator.userAgent
-            });
-
-            scheduleFlush();
-        } catch (e) {
-            // Fail silently
-        }
-
-        // Let the rejection continue to propagate
-        return false;
-    });
-
-    // Flush on page unload
-    window.addEventListener('beforeunload', () => {
-        if (logQueue.length > 0) {
-            navigator.sendBeacon(ENDPOINT, JSON.stringify({ logs: logQueue }));
-        }
-    });
-})();
-</script>
 </head>
 
 <body class="space-grotesk-300 vertical-menu" dir="ltr">
@@ -3728,7 +3523,42 @@ public function store(Request $request)
     </div>
 
     <!-- start CDN scripts -->
-    <!-- start core javascript libraries -->
+<!-- Upgrade to Wavedash Modal -->
+<div class="modal fade" id="upgradeModal" tabindex="-1" aria-labelledby="upgradeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-dark">
+                <h5 class="modal-title" id="upgradeModalLabel">
+                    <i class="material-symbols-rounded me-2" style="vertical-align: middle;">star</i>
+                    Unlock Wavedash Pro
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center py-4">
+                    <i class="material-symbols-rounded text-primary mb-3" style="font-size: 64px;">workspace_premium</i>
+                    <h4 class="mb-3">Build Admin Tools Faster</h4>
+                    <p class="mb-4">
+                        Upgrade to the full Wavedash design system to access the complete library of Livewire dashboards,
+                        forms, and components that power this demo.
+                    </p>
+                    <ul class="text-start mb-4">
+                        <li>150+ production-ready views and Livewire presets</li>
+                        <li>Adaptive light and dark theming with one toggle</li>
+                        <li>CosmicWave micro-interactions and iconography</li>
+                        <li>Commercial license for unlimited client projects</li>
+                    </ul>
+                    <a href="https://wavedash.pro" class="btn btn-primary btn-lg w-100" target="_blank" rel="noopener">
+                        <i class="material-symbols-rounded me-2" style="vertical-align: middle;">shopping_cart</i>
+                        View Wavedash Pro
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- start core javascript libraries -->
 <!-- Bootstrap 5.3.5 Javascript Library -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous">
@@ -3820,26 +3650,6 @@ public function store(Request $request)
 </script>
 <!-- end core javascript libraries -->
 
-<!-- start chart & visualization libraries -->
-<!-- ApexCharts JS -->
-<script src="https://cdn.jsdelivr.net/npm/apexcharts@latest/dist/apexcharts.min.js"></script>
-
-<!-- Chart.js CDN -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js">
-</script>
-
-<!-- JSVector Maps Core Library -->
-<script src="https://cdn.jsdelivr.net/npm/jsvectormap@1.5.3/dist/js/jsvectormap.min.js"></script>
-<!-- end chart & visualization libraries -->
-
-<!-- start UI component libraries -->
-<!-- Grid.js -->
-<script src="https://cdn.jsdelivr.net/npm/gridjs/dist/gridjs.umd.js"></script>
-
-<!-- FullCalendar JS -->
-<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.13/index.global.min.js'></script>
-
 <!-- Prism.js for code highlighting -->
 <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-core.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
@@ -3853,35 +3663,14 @@ public function store(Request $request)
 <!-- modal lightbox -->
 <script src="https://cdn.jsdelivr.net/npm/bs5-lightbox@1.8.5/dist/index.bundle.min.js"></script>
 
-<!-- Masonry Layout -->
-<script src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js"
-    integrity="sha384-GNFwBvfVxBkLMJpYMOABq3c+d3KnQxudP/mGPkzpZSTYykLBNsZEnG2D9G/X/+7D" crossorigin="anonymous" async>
-</script>
-
-<!-- Quill JS -->
-<script src="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.min.js"></script>
-
 <!-- CosmicWave Component -->
 <script src="https://cdn.jsdelivr.net/npm/@huement/cosmicwave/dist/cosmicwave.min.js"></script>
 
 <!-- fit text -->
 <script src="https://cdn.jsdelivr.net/npm/fitty@2.3.6/dist/fitty.min.js"></script>
 
-<!-- Form Enhancement Libraries -->
-<!-- TinyMCE -->
-<script src="https://cdn.jsdelivr.net/npm/tinymce@6.8.2/tinymce.min.js"></script>
-<!-- Choices.js -->
-<script src="https://cdn.jsdelivr.net/npm/choices.js@10.1.0/public/assets/scripts/choices.min.js"></script>
-<!-- Flatpickr -->
-<script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.js"></script>
-<!-- Cleave.js -->
-<script src="https://cdn.jsdelivr.net/npm/cleave.js@1.6.0/dist/cleave.min.js"></script>
-
-<!-- xterm.js Terminal -->
-<script src="https://cdn.jsdelivr.net/npm/xterm@5.3.0/lib/xterm.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@xterm/addon-fit@0.10.0/lib/addon-fit.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@xterm/addon-web-links@0.11.0/lib/addon-web-links.min.js"></script>
 <!-- end UI component libraries -->
+<script type="module" src="./assets/admin.js"></script>
     <!-- end CDN scripts -->
 
     <!-- Jquery Free JSON Table (local asset) -->
@@ -3957,6 +3746,53 @@ public function store(Request $request)
         });
     </script>
     <!-- end page-specific scripts -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const upgradeModalElement = document.getElementById('upgradeModal');
+            if (!upgradeModalElement || typeof bootstrap === 'undefined' || !bootstrap.Modal) {
+                return;
+            }
+
+            const showUpgradeModal = function (event) {
+                if (event) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                bootstrap.Modal.getOrCreateInstance(upgradeModalElement).show();
+            };
+
+            document.querySelectorAll('a[href$=".html"], a[href^="../"]').forEach(function (anchor) {
+                anchor.addEventListener('click', showUpgradeModal);
+            });
+
+            ['floating-sidebar-toggle-container', 'offcanvas-sidebar-toggle-container'].forEach(function (id) {
+                const container = document.getElementById(id);
+                if (!container) {
+                    return;
+                }
+
+                container.addEventListener('click', showUpgradeModal, true);
+
+                container.querySelectorAll('input[type="checkbox"]').forEach(function (input) {
+                    input.addEventListener('change', function (event) {
+                        event.preventDefault();
+                        event.target.checked = false;
+                        showUpgradeModal(event);
+                    });
+                });
+            });
+
+            document.querySelectorAll('[data-target-url], [data-static-export="true"]').forEach(function (element) {
+                element.addEventListener('click', showUpgradeModal);
+                element.addEventListener('change', function (event) {
+                    if (event && event.target && typeof event.target.checked !== 'undefined') {
+                        event.target.checked = false;
+                    }
+                    showUpgradeModal(event);
+                });
+            });
+        });
+    </script>
     <script src="./js/admin-inline-utils.js"></script>
     <script src="./js/admin-static-shim.js"></script>
 </body>

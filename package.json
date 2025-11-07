@@ -1,0 +1,46 @@
+{
+  "name": "@huement/hui-icon-picker",
+  "version": "1.0.0",
+  "description": "Accessible web component icon picker with Bootstrap Icons and Material Symbols support.",
+  "main": "dist/hui-icon-picker.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rollup -c",
+    "watch": "rollup -c -w",
+    "clean": "rm -rf dist",
+    "prepare": "npm run build"
+  },
+  "keywords": [
+    "icons",
+    "bootstrap",
+    "hui",
+    "web",
+    "components"
+  ],
+  "author": "derek scott",
+  "license": "ISC",
+  "module": "dist/hui-icon-picker.js",
+  "types": "dist/hui-icon-picker.d.ts",
+  "files": [
+    "dist"
+  ],
+  "peerDependencies": {
+    "bootstrap-icons": "^1.11.0"
+  },
+  "devDependencies": {
+    "@rollup/plugin-terser": "^0.4.4",
+    "rollup": "^4.21.0",
+    "rollup-plugin-dts": "^6.1.0"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/hui-icon-picker.js",
+      "require": "./dist/hui-icon-picker.js",
+      "types": "./dist/hui-icon-picker.d.ts"
+    },
+    "./*": "./*"
+  }
+}

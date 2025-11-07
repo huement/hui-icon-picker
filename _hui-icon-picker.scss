@@ -1,0 +1,150 @@
+// =============================================================================
+// ICON PICKER COMPONENT STYLES
+// =============================================================================
+
+// Main icon picker wrapper
+.icon-picker-wrapper {
+	// Icon grid items (modal)
+	.icon-item {
+		cursor: pointer;
+		transition: all 0.2s ease;
+		border: 2px solid transparent;
+		border-radius: 8px;
+		padding: 12px;
+		text-align: center;
+		background: rgba(var(--bs-body-color-rgb), 0.03);
+	}
+
+	.icon-item:hover {
+		background: rgba(var(--bs-primary-rgb), 0.1);
+		border-color: var(--bs-primary);
+		transform: translateY(-2px);
+	}
+
+	.icon-item.selected {
+		background: rgba(var(--bs-primary-rgb), 0.2);
+		border-color: var(--bs-primary);
+	}
+
+	.icon-item i {
+		font-size: 24px;
+		display: block;
+		margin-bottom: 4px;
+	}
+
+	.icon-item .icon-name {
+		font-size: 10px;
+		color: var(--bs-body-color);
+		opacity: 0.7;
+		word-break: break-all;
+	}
+
+	// Display area
+	.icon-picker-display i,
+	.icon-picker-display svg {
+		margin-right: 8px;
+	}
+
+	// Clear button styling
+	.icon-picker-clear {
+		border-left: 0 !important;
+		flex-shrink: 0; // Prevent button from shrinking
+	}
+
+	// Loading state
+	.icon-loading {
+		display: none;
+	}
+
+	.icon-loading.active {
+		display: block;
+	}
+
+	.icon-grid-container.loading {
+		display: none;
+	}
+}
+
+// =============================================================================
+// ICON PICKER INLINE COMPONENT STYLES
+// =============================================================================
+
+.icon-picker-inline-wrapper {
+	position: relative;
+	pointer-events: auto !important;
+}
+
+.icon-picker-inline-panel {
+	position: relative;
+	margin-top: 4px;
+	pointer-events: auto !important;
+	animation: slideDown 0.2s ease;
+}
+
+.icon-picker-inline-panel > div {
+	background-color: var(--bs-body-bg) !important;
+	border: 2px solid var(--bs-border-color) !important;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+	pointer-events: auto !important;
+}
+
+.icon-picker-inline-wrapper .icon-item-inline {
+	cursor: pointer;
+	transition: all 0.2s ease;
+	border: 2px solid transparent;
+	border-radius: 6px;
+	padding: 8px;
+	text-align: center;
+	background: rgba(var(--bs-body-color-rgb), 0.03);
+	aspect-ratio: 1;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	pointer-events: auto !important;
+}
+
+.icon-picker-inline-wrapper .icon-item-inline:hover {
+	background: rgba(var(--bs-primary-rgb), 0.1);
+	border-color: var(--bs-primary);
+	transform: scale(1.05);
+}
+
+.icon-picker-inline-wrapper .icon-item-inline.selected {
+	background: rgba(var(--bs-primary-rgb), 0.2);
+	border-color: var(--bs-primary);
+}
+
+.icon-picker-inline-wrapper .icon-item-inline i {
+	font-size: 20px;
+}
+
+.icon-picker-inline-wrapper .icon-picker-inline-display i,
+.icon-picker-inline-wrapper .icon-picker-inline-display svg {
+	margin-right: 8px;
+}
+
+.icon-picker-inline-wrapper .icon-picker-chevron {
+	transition: transform 0.2s ease;
+}
+
+.icon-picker-inline-wrapper.expanded .icon-picker-chevron {
+	transform: rotate(180deg);
+}
+
+.icon-picker-inline-clear {
+	border-left: 0 !important;
+}
+
+@keyframes slideDown {
+	from {
+		opacity: 0;
+		transform: translateY(-10px);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+

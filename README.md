@@ -1,6 +1,10 @@
 # HUI Icon Picker
 
+![HUI Icon Picker preview](./preview.png)
+
 Accessible, framework-agnostic icon picker delivered as a Web Component. Designed to pair with [Bootstrap Icons](https://icons.getbootstrap.com/) and [Material Symbols Rounded](https://fonts.google.com/icons) while remaining lightweight and easy to drop into any frontend stack.
+
+![HUI Icon Picker input preview](./input-preview.png)
 
 ## Quick Start
 

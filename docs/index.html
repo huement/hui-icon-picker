@@ -82,6 +82,14 @@
         font-feature-settings: 'liga' !important;
         vertical-align: middle !important;
     }
+    /* Ensure modals and backdrops sit above all demo content */
+    .modal,
+    .modal-dialog {
+        z-index: 2000 !important;
+    }
+    .modal-backdrop {
+        z-index: 1990 !important;
+    }
 </style>
     <!-- end meta tags & title -->
 
@@ -2109,64 +2117,6 @@
         </button>
     </div>
 
-    <!-- Icon Picker Modal -->
-    <div class="modal fade" id="iconPickerModal-demo-icon-1" tabindex="-1" aria-hidden="true"
-        data-bs-backdrop="false">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">
-                        <i class="material-symbols-rounded me-2">style</i>
-                        Icon Picker
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <!-- Icon Family Selector -->
-                    <div class="mb-3">
-                        <label class="form-label">Icon Family</label>
-                        <select class="form-select icon-family-selector">
-                            <option value="bootstrap">Bootstrap Icons</option>
-                            <option value="material">Material Symbols Rounded</option>
-                        </select>
-                    </div>
-
-                    <!-- Search Box -->
-                    <div class="mb-3">
-                        <div class="input-group">
-                            <span class="input-group-text">
-                                <i class="material-symbols-rounded">search</i>
-                            </span>
-                            <input type="text" class="form-control icon-search-input" placeholder="Search icons..."
-                                autocomplete="off">
-                        </div>
-                        <div class="icon-search-results position-absolute w-100 d-none" style="z-index: 1050;"></div>
-                    </div>
-
-                    <!-- Icon Grid -->
-                    <div class="icon-grid-container" style="max-height: 400px; overflow-y: auto;">
-                        <div class="row row-cols-4 row-cols-sm-6 row-cols-md-8 g-2 icon-grid">
-                            <!-- Icons will be loaded here -->
-                        </div>
-                    </div>
-
-                    <!-- Loading State -->
-                    <div class="text-center py-5 icon-loading">
-                        <div class="spinner-border text-primary" role="status">
-                            <span class="visually-hidden">Loading...</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary icon-picker-confirm" disabled>
-                        <i class="material-symbols-rounded me-1" style="font-size: 16px;">check</i>
-                        Select Icon
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
                             </div>
                             <div class="alert alert-info">
@@ -3670,7 +3620,6 @@ public function store(Request $request)
 <script src="https://cdn.jsdelivr.net/npm/fitty@2.3.6/dist/fitty.min.js"></script>
 
 <!-- end UI component libraries -->
-<script type="module" src="./assets/admin.js"></script>
     <!-- end CDN scripts -->
 
     <!-- Jquery Free JSON Table (local asset) -->
@@ -3793,6 +3742,56 @@ public function store(Request $request)
             });
         });
     </script>
+    <!-- Icon Picker Demo Modal -->
+    <div class="modal fade" id="iconPickerModal-demo-icon-1" tabindex="-1" aria-hidden="true" data-bs-backdrop="false">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="material-symbols-rounded me-2">style</i>
+                        Icon Picker
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Icon Family</label>
+                        <select class="form-select icon-family-selector">
+                            <option value="bootstrap">Bootstrap Icons</option>
+                            <option value="material">Material Symbols Rounded</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="material-symbols-rounded">search</i>
+                            </span>
+                            <input type="text" class="form-control icon-search-input" placeholder="Search icons..." autocomplete="off">
+                        </div>
+                        <div class="icon-search-results position-absolute w-100 d-none" style="z-index: 1050;"></div>
+                    </div>
+                    <div class="icon-grid-container" style="max-height: 400px; overflow-y: auto;">
+                        <div class="row row-cols-4 row-cols-sm-6 row-cols-md-8 g-2 icon-grid">
+                            <!-- Icons will be loaded here -->
+                        </div>
+                    </div>
+                    <div class="text-center py-5 icon-loading">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary icon-picker-confirm" disabled>
+                        <i class="material-symbols-rounded me-1" style="font-size: 16px;">check</i>
+                        Select Icon
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="./js/icon-picker-demo.js"></script>
     <script src="./js/admin-inline-utils.js"></script>
     <script src="./js/admin-static-shim.js"></script>
 </body>

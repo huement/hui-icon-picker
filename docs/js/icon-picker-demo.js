@@ -41,6 +41,7 @@
         if (modal.parentElement !== document.body) {
             document.body.appendChild(modal);
         }
+        modal.classList.add("icon-picker-modal");
 
         let currentFamily = "bootstrap";
         let selectedIcon = null;

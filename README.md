@@ -1,10 +1,10 @@
 # HUI Icon Picker
 
-![HUI Icon Picker preview](./preview.png)
+![HUI Icon Picker preview](preview.png)
 
-Accessible, framework-agnostic icon picker delivered as a Web Component. Designed to pair with [Bootstrap Icons](https://icons.getbootstrap.com/) and [Material Symbols Rounded](https://fonts.google.com/icons) while remaining lightweight and easy to drop into any frontend stack.
+Accessible, framework-agnostic icon picker delivered as a Web Component. Designed to pair with any icon font, included is [Bootstrap Icons](https://icons.getbootstrap.com/) and [Material Symbols Rounded](https://fonts.google.com/icons). You can easily add any other font / families you need however. 
 
-![HUI Icon Picker input preview](./input-preview.png)
+![HUI Icon Picker input preview](input-preview.png)
 
 ## Quick Start
 
@@ -102,6 +102,20 @@ Use `npm run watch` for live rebuilds and `npm run clean` to wipe all build outp
 ## Browser Support
 
 The component targets evergreen browsers with Custom Elements, Shadow DOM, and `ElementInternals` support. Older browsers can be supported with Web Component polyfills.
+
+## Come Check Us Out!
+
+<div align="center">
+  <a href="https://huement.com" target="_blank" rel="noreferrer">
+    <img src="./huement-logo.png" alt="Huement" width="200" />
+  </a>
+  <br/>
+  <p>
+    Crafted by the team at <a href="https://huement.com" target="_blank" rel="noreferrer">Huement</a>.
+    Follow our engineering deep dives and product notes on the
+    <a href="https://huement.blog" target="_blank" rel="noreferrer">Huement Blog</a>.
+  </p>
+</div>
 
 ## License
 

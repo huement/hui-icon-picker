@@ -760,57 +760,6 @@
     </nav>
 </header>
 
-<!-- Mobile Search Overlay -->
-<div id="mobile-search-overlay" class="mobile-search-overlay d-lg-none">
-    <div class="mobile-search-container">
-        <div class="mobile-search-header">
-            <div class="d-flex justify-content-between align-items-center">
-                <h5 class="mb-0">Search</h5>
-                <button class="btn mobile-search-close" id="mobile-search-close">
-                    <span class="material-symbols-rounded">close</span>
-                </button>
-            </div>
-        </div>
-        <div class="mobile-search-results">
-            <!-- Search Input Section -->
-            <div class="mobile-search-input-section mb-4">
-                <form class="mobile-search-form" id="mobile-search-form">
-                    <div class="input-group">
-                        <input type="text" class="form-control mobile-search-main-input"
-                            placeholder="Search pages, components, or features..." id="mobile-search-main-input">
-                        <button class="btn btn-primary" type="submit">
-                            <span class="material-symbols-rounded">search</span>
-                        </button>
-                    </div>
-                </form>
-            </div>
-
-            <!-- Quick Commands Section -->
-            <div class="mobile-search-suggestions">
-                <h6 class="text-muted mb-3">Quick Commands</h6>
-                <div class="mobile-command-list">
-                    <div class="mobile-command-item" data-command="run:diagnostics">
-                        <span class="command-name">run:diagnostics</span>
-                        <span class="command-desc">Run all system checks</span>
-                    </div>
-                    <div class="mobile-command-item" data-command="db:connect">
-                        <span class="command-name">db:connect</span>
-                        <span class="command-desc">Connect to primary DB</span>
-                    </div>
-                    <div class="mobile-command-item" data-command="cache:clear">
-                        <span class="command-name">cache:clear</span>
-                        <span class="command-desc">Clear application cache</span>
-                    </div>
-                    <div class="mobile-command-item" data-command="users:list">
-                        <span class="command-name">users:list</span>
-                        <span class="command-desc">Show all active users</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
 <!-- Admin Settings Menu (slides down from top) -->
 <div id="admin-settings-menu" class="admin-settings-menu">
     <div class="admin-settings-panel">
@@ -2074,6 +2023,12 @@
                                     </div>
             </div>
             <!-- end breadcrumb -->
+
+            <div class="alert alert-info">
+                <h3 class="text-dark">Heads Up! This page is only an excerpt from the WaveDash Admin Dashboard UI Kit.</h3>
+                <p>The icon picker is used throughout that project. If you would like to support us, please consider checking out 'WaveDash', and purchasing it if you find it useful!</p>
+                <p>For a more basic demo, visit the playground: <a href="playground.html" class="text-danger" data-allow="yes">icon picker playground</a></p>
+            </div>
 
             <!-- start page content -->
                 <div class="icon-picker-page">
@@ -3544,7 +3499,7 @@ public function store(Request $request)
                         <li>CosmicWave micro-interactions and iconography</li>
                         <li>Commercial license for unlimited client projects</li>
                     </ul>
-                    <a href="https://wavedash.pro" class="btn btn-primary btn-lg w-100" target="_blank" rel="noopener">
+                    <a href="https://huement.com" class="btn btn-primary btn-lg w-100" target="_blank" rel="noopener">
                         <i class="material-symbols-rounded me-2" style="vertical-align: middle;">shopping_cart</i>
                         View Wavedash Pro
                     </a>
@@ -3757,6 +3712,9 @@ public function store(Request $request)
             };
 
             document.querySelectorAll('a[href$=".html"], a[href^="../"]').forEach(function (anchor) {
+                if (anchor.dataset.allow === 'yes') {
+                    return;
+                }
                 anchor.addEventListener('click', showUpgradeModal);
             });
 

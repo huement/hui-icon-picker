@@ -1387,9 +1387,11 @@
       .filter((family) => ICON_FAMILIES[family]);
   }
 
-  const template = document.createElement('template');
+  const template = document.createElement("template");
 
   template.innerHTML = `
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0&display=block" crossorigin="anonymous" />
   <style>
     :host {
       --hui-picker-background: #fff;
@@ -1759,6 +1761,26 @@
         order: 2;
       }
     }
+
+    .material-symbols-rounded,
+    .material-icons {
+      font-family: 'Material Symbols Rounded', 'Material Icons', sans-serif;
+      font-weight: normal;
+      font-style: normal;
+      font-size: 24px;
+      line-height: 1;
+      letter-spacing: normal;
+      text-transform: none;
+      display: inline-block;
+      white-space: nowrap;
+      word-wrap: normal;
+      direction: ltr;
+      -webkit-font-feature-settings: 'liga';
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+      font-feature-settings: 'liga';
+      vertical-align: middle;
+    }
   </style>
   <div class="picker-control">
     <button class="trigger" type="button" part="trigger" aria-haspopup="dialog" aria-expanded="false">
@@ -1804,72 +1826,74 @@
 
   class HuiIconPicker extends HTMLElement {
     static get observedAttributes() {
-      return ['value', 'family', 'families', 'placeholder', 'label', 'disabled'];
+      return ["value", "family", "families", "placeholder", "label", "disabled"];
     }
 
     static formAssociated = true;
 
     constructor() {
       super();
-      this.attachShadow({ mode: 'open' });
+      this.attachShadow({ mode: "open" });
       this.shadowRoot.appendChild(template.content.cloneNode(true));
 
       this._internals = this.attachInternals?.();
       this._families = resolveFamilies(DEFAULT_FAMILY_ORDER);
-      this._currentFamily = this._families[0] ?? 'bootstrap';
-      this._value = '';
-      this._name = this.getAttribute('name');
-      this._placeholder = this.getAttribute('placeholder') || 'Select an icon';
-      this._label = this.getAttribute('label') || 'Icon';
+      this._currentFamily = this._families[0] ?? "bootstrap";
+      this._value = "";
+      this._name = this.getAttribute("name");
+      this._placeholder = this.getAttribute("placeholder") || "Select an icon";
+      this._label = this.getAttribute("label") || "Icon";
       this._open = false;
 
       this._boundHandleDocumentKeydown = this._handleDocumentKeydown.bind(this);
       this._boundHandleOutsideClick = this._handleOutsideClick.bind(this);
 
       this.elements = {
-        trigger: this.shadowRoot.querySelector('.trigger'),
-        clear: this.shadowRoot.querySelector('.clear'),
-        preview: this.shadowRoot.querySelector('.icon-preview'),
-        valueLabel: this.shadowRoot.querySelector('.label-selection'),
-        labelTitle: this.shadowRoot.querySelector('.label-title'),
-        backdrop: this.shadowRoot.querySelector('.backdrop'),
-        panel: this.shadowRoot.querySelector('.panel'),
-        families: this.shadowRoot.querySelector('.families'),
-        searchInput: this.shadowRoot.querySelector('.search input'),
-        summary: this.shadowRoot.querySelector('.results-summary'),
-        grid: this.shadowRoot.querySelector('.icon-grid'),
-        close: this.shadowRoot.querySelector('.close')
+        trigger: this.shadowRoot.querySelector(".trigger"),
+        clear: this.shadowRoot.querySelector(".clear"),
+        preview: this.shadowRoot.querySelector(".icon-preview"),
+        valueLabel: this.shadowRoot.querySelector(".label-selection"),
+        labelTitle: this.shadowRoot.querySelector(".label-title"),
+        backdrop: this.shadowRoot.querySelector(".backdrop"),
+        panel: this.shadowRoot.querySelector(".panel"),
+        families: this.shadowRoot.querySelector(".families"),
+        searchInput: this.shadowRoot.querySelector(".search input"),
+        summary: this.shadowRoot.querySelector(".results-summary"),
+        grid: this.shadowRoot.querySelector(".icon-grid"),
+        close: this.shadowRoot.querySelector(".close"),
       };
 
-      this.elements.trigger.addEventListener('click', () => this.toggle());
-      this.elements.clear.addEventListener('click', () => this.clear());
-      this.elements.close.addEventListener('click', () => this.close());
-      this.elements.backdrop.addEventListener('click', () => this.close());
-      this.elements.searchInput.addEventListener('input', () => this._renderIcons());
+      this.elements.trigger.addEventListener("click", () => this.toggle());
+      this.elements.clear.addEventListener("click", () => this.clear());
+      this.elements.close.addEventListener("click", () => this.close());
+      this.elements.backdrop.addEventListener("click", () => this.close());
+      this.elements.searchInput.addEventListener("input", () =>
+        this._renderIcons()
+      );
     }
 
     connectedCallback() {
-      if (this.hasAttribute('families')) {
-        this._families = resolveFamilies(this.getAttribute('families'));
+      if (this.hasAttribute("families")) {
+        this._families = resolveFamilies(this.getAttribute("families"));
       }
 
       if (!this._families.length) {
         this._families = resolveFamilies(DEFAULT_FAMILY_ORDER);
       }
 
-      if (this.hasAttribute('family')) {
-        const familyAttr = this.getAttribute('family');
+      if (this.hasAttribute("family")) {
+        const familyAttr = this.getAttribute("family");
         if (this._families.includes(familyAttr)) {
           this._currentFamily = familyAttr;
         }
       }
 
-      if (this.hasAttribute('value')) {
-        this._value = this.getAttribute('value');
+      if (this.hasAttribute("value")) {
+        this._value = this.getAttribute("value");
       }
 
-      this._placeholder = this.getAttribute('placeholder') || this._placeholder;
-      this._label = this.getAttribute('label') || this._label;
+      this._placeholder = this.getAttribute("placeholder") || this._placeholder;
+      this._label = this.getAttribute("label") || this._label;
 
       this._renderFamilies();
       this._renderIcons();
@@ -1885,19 +1909,19 @@
 
     attributeChangedCallback(name, _oldValue, newValue) {
       switch (name) {
-        case 'value':
-          this._value = newValue ?? '';
+        case "value":
+          this._value = newValue ?? "";
           this._updateDisplay();
           this._syncFormValue();
           break;
-        case 'family':
+        case "family":
           if (newValue && this._families.includes(newValue)) {
             this._currentFamily = newValue;
             this._renderFamilies();
             this._renderIcons();
           }
           break;
-        case 'families':
+        case "families":
           this._families = resolveFamilies(newValue);
           if (!this._families.length) {
             this._families = resolveFamilies(DEFAULT_FAMILY_ORDER);
@@ -1908,16 +1932,19 @@
           this._renderFamilies();
           this._renderIcons();
           break;
-        case 'placeholder':
-          this._placeholder = newValue || 'Select an icon';
+        case "placeholder":
+          this._placeholder = newValue || "Select an icon";
           this._updateDisplay();
           break;
-        case 'label':
-          this._label = newValue || 'Icon';
+        case "label":
+          this._label = newValue || "Icon";
           this._applyLabeling();
           break;
-        case 'disabled':
-          this.elements.trigger.toggleAttribute('disabled', this.hasAttribute('disabled'));
+        case "disabled":
+          this.elements.trigger.toggleAttribute(
+            "disabled",
+            this.hasAttribute("disabled")
+          );
           break;
       }
     }
@@ -1930,11 +1957,11 @@
     /** @param {string} newValue */
     set value(newValue) {
       if (newValue === this._value) return;
-      this._value = newValue || '';
+      this._value = newValue || "";
       this._updateDisplay();
       this._syncFormValue();
-      this.dispatchEvent(new InputEvent('input', { bubbles: true }));
-      this.dispatchEvent(new Event('change', { bubbles: true }));
+      this.dispatchEvent(new InputEvent("input", { bubbles: true }));
+      this.dispatchEvent(new Event("change", { bubbles: true }));
     }
 
     /** @returns {string} */
@@ -1947,7 +1974,7 @@
       if (!this._families.includes(newFamily)) return;
       if (newFamily === this._currentFamily) return;
       this._currentFamily = newFamily;
-      this.setAttribute('family', newFamily);
+      this.setAttribute("family", newFamily);
       this._renderFamilies();
       this._renderIcons();
     }
@@ -1965,7 +1992,7 @@
       if (!this._families.includes(this._currentFamily)) {
         this._currentFamily = this._families[0];
       }
-      this.setAttribute('families', this._families.join(','));
+      this.setAttribute("families", this._families.join(","));
       this._renderFamilies();
       this._renderIcons();
     }
@@ -1975,12 +2002,12 @@
     }
 
     openPicker() {
-      if (this._open || this.hasAttribute('disabled')) return;
+      if (this._open || this.hasAttribute("disabled")) return;
       this._open = true;
-      this.setAttribute('open', '');
-      this.elements.trigger.setAttribute('aria-expanded', 'true');
-      this.elements.panel.setAttribute('aria-hidden', 'false');
-      this.elements.backdrop.setAttribute('aria-hidden', 'false');
+      this.setAttribute("open", "");
+      this.elements.trigger.setAttribute("aria-expanded", "true");
+      this.elements.panel.setAttribute("aria-hidden", "false");
+      this.elements.backdrop.setAttribute("aria-hidden", "false");
       this._addDocumentListeners();
       this.elements.searchInput.focus({ preventScroll: true });
     }
@@ -1988,10 +2015,10 @@
     close() {
       if (!this._open) return;
       this._open = false;
-      this.removeAttribute('open');
-      this.elements.trigger.setAttribute('aria-expanded', 'false');
-      this.elements.panel.setAttribute('aria-hidden', 'true');
-      this.elements.backdrop.setAttribute('aria-hidden', 'true');
+      this.removeAttribute("open");
+      this.elements.trigger.setAttribute("aria-expanded", "false");
+      this.elements.panel.setAttribute("aria-hidden", "true");
+      this.elements.backdrop.setAttribute("aria-hidden", "true");
       this._removeDocumentListeners();
       this.elements.trigger.focus({ preventScroll: true });
     }
@@ -2005,8 +2032,8 @@
     }
 
     clear() {
-      this.value = '';
-      this.dispatchEvent(new CustomEvent('icon-clear', { bubbles: true }));
+      this.value = "";
+      this.dispatchEvent(new CustomEvent("icon-clear", { bubbles: true }));
     }
 
     /**
@@ -2020,13 +2047,13 @@
       const preview = familyConfig.previewClass(name);
       this.value = `${family}:${name}`;
       this.dispatchEvent(
-        new CustomEvent('icon-select', {
+        new CustomEvent("icon-select", {
           detail: /** @type {HuiIconSelection} */ ({
             family,
             name,
-            preview
+            preview,
           }),
-          bubbles: true
+          bubbles: true,
         })
       );
       this.close();
@@ -2037,30 +2064,33 @@
     }
 
     formResetCallback() {
-      this.value = this.getAttribute('value') || '';
+      this.value = this.getAttribute("value") || "";
     }
 
     formStateRestoreCallback(state) {
-      if (typeof state === 'string') {
+      if (typeof state === "string") {
         this.value = state;
       }
     }
 
     _renderFamilies() {
       const { families } = this.elements;
-      families.innerHTML = '';
+      families.innerHTML = "";
 
       this._families.forEach((family) => {
         const config = ICON_FAMILIES[family];
         if (!config) return;
 
-        const button = document.createElement('button');
-        button.type = 'button';
-        button.className = 'family-button';
-        button.setAttribute('role', 'tab');
-        button.setAttribute('aria-pressed', String(family === this._currentFamily));
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "family-button";
+        button.setAttribute("role", "tab");
+        button.setAttribute(
+          "aria-pressed",
+          String(family === this._currentFamily)
+        );
         button.textContent = config.name;
-        button.addEventListener('click', () => {
+        button.addEventListener("click", () => {
           this.family = family;
         });
         families.appendChild(button);
@@ -2075,15 +2105,19 @@
 
       const icons = !searchTerm
         ? familyConfig.icons
-        : familyConfig.icons.filter((icon) => icon.toLowerCase().includes(searchTerm));
+        : familyConfig.icons.filter((icon) =>
+            icon.toLowerCase().includes(searchTerm)
+          );
 
-      this.elements.summary.textContent = `${icons.length} icon${icons.length === 1 ? '' : 's'} available`;
+      this.elements.summary.textContent = `${icons.length} icon${
+      icons.length === 1 ? "" : "s"
+    } available`;
 
-      this.elements.grid.innerHTML = '';
+      this.elements.grid.innerHTML = "";
 
       if (!icons.length) {
-        const empty = document.createElement('div');
-        empty.className = 'empty-state';
+        const empty = document.createElement("div");
+        empty.className = "empty-state";
         empty.innerHTML = `
         <span aria-hidden="true" style="font-size:2.5rem;">🔎</span>
         <strong>No icons found</strong>
@@ -2096,17 +2130,26 @@
       const currentSelection = this._parseValue(this._value);
 
       icons.forEach((icon) => {
-        const button = document.createElement('button');
-        button.type = 'button';
-        button.className = 'icon-button';
-        button.setAttribute('role', 'option');
-        button.setAttribute('data-icon', icon);
-        button.setAttribute('aria-selected', String(currentSelection && currentSelection.name === icon && currentSelection.family === this._currentFamily));
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "icon-button";
+        button.setAttribute("role", "option");
+        button.setAttribute("data-icon", icon);
+        button.setAttribute(
+          "aria-selected",
+          String(
+            currentSelection &&
+              currentSelection.name === icon &&
+              currentSelection.family === this._currentFamily
+          )
+        );
         button.innerHTML = `
         ${familyConfig.previewClass(icon)}
         <span>${icon}</span>
       `;
-        button.addEventListener('click', () => this.selectIcon(icon, this._currentFamily));
+        button.addEventListener("click", () =>
+          this.selectIcon(icon, this._currentFamily)
+        );
         this.elements.grid.appendChild(button);
       });
     }
@@ -2116,18 +2159,25 @@
       const hasSelection = Boolean(selection && ICON_FAMILIES[selection.family]);
 
       this.elements.labelTitle.textContent = this._label;
-      this.elements.valueLabel.textContent = hasSelection ? selection.name : this._placeholder;
+      this.elements.valueLabel.textContent = hasSelection
+        ? selection.name
+        : this._placeholder;
 
-      this.elements.preview.classList.toggle('empty', !hasSelection);
+      this.elements.preview.classList.toggle("empty", !hasSelection);
       this.elements.clear.hidden = !hasSelection;
 
       if (hasSelection) {
-        const previewHtml = ICON_FAMILIES[selection.family].previewClass(selection.name);
+        const previewHtml = ICON_FAMILIES[selection.family].previewClass(
+          selection.name
+        );
         this.elements.preview.innerHTML = previewHtml;
-        this.elements.trigger.setAttribute('data-selected-family', selection.family);
+        this.elements.trigger.setAttribute(
+          "data-selected-family",
+          selection.family
+        );
       } else {
-        this.elements.preview.innerHTML = '☆';
-        this.elements.trigger.removeAttribute('data-selected-family');
+        this.elements.preview.innerHTML = "☆";
+        this.elements.trigger.removeAttribute("data-selected-family");
       }
 
       this._highlightSelection();
@@ -2135,11 +2185,15 @@
 
     _highlightSelection() {
       const selection = this._parseValue(this._value);
-      const buttons = this.elements.grid.querySelectorAll('.icon-button');
+      const buttons = this.elements.grid.querySelectorAll(".icon-button");
       buttons.forEach((button) => {
-        const icon = button.getAttribute('data-icon');
-        const familyMatches = selection && selection.family === this._currentFamily;
-        button.setAttribute('aria-selected', String(familyMatches && selection?.name === icon));
+        const icon = button.getAttribute("data-icon");
+        const familyMatches =
+          selection && selection.family === this._currentFamily;
+        button.setAttribute(
+          "aria-selected",
+          String(familyMatches && selection?.name === icon)
+        );
       });
     }
 
@@ -2149,31 +2203,50 @@
     }
 
     _syncAria() {
-      this.elements.trigger.setAttribute('aria-expanded', this._open ? 'true' : 'false');
+      this.elements.trigger.setAttribute(
+        "aria-expanded",
+        this._open ? "true" : "false"
+      );
     }
 
     _applyLabeling() {
       this.elements.labelTitle.textContent = this._label;
-      this.shadowRoot.host.setAttribute('aria-label', this._label);
+      this.shadowRoot.host.setAttribute("aria-label", this._label);
     }
 
     _addDocumentListeners() {
-      document.addEventListener('keydown', this._boundHandleDocumentKeydown, true);
-      document.addEventListener('pointerdown', this._boundHandleOutsideClick, true);
+      document.addEventListener(
+        "keydown",
+        this._boundHandleDocumentKeydown,
+        true
+      );
+      document.addEventListener(
+        "pointerdown",
+        this._boundHandleOutsideClick,
+        true
+      );
     }
 
     _removeDocumentListeners() {
-      document.removeEventListener('keydown', this._boundHandleDocumentKeydown, true);
-      document.removeEventListener('pointerdown', this._boundHandleOutsideClick, true);
+      document.removeEventListener(
+        "keydown",
+        this._boundHandleDocumentKeydown,
+        true
+      );
+      document.removeEventListener(
+        "pointerdown",
+        this._boundHandleOutsideClick,
+        true
+      );
     }
 
     _handleDocumentKeydown(event) {
-      if (event.key === 'Escape') {
+      if (event.key === "Escape") {
         event.preventDefault();
         this.close();
       }
 
-      if (event.key === 'Tab' && this._open) {
+      if (event.key === "Tab" && this._open) {
         const focusable = this._getFocusableElements();
         if (!focusable.length) return;
 
@@ -2192,7 +2265,10 @@
 
     _handleOutsideClick(event) {
       if (!this._open) return;
-      if (event.composedPath().includes(this) || event.composedPath().includes(this.elements.panel)) {
+      if (
+        event.composedPath().includes(this) ||
+        event.composedPath().includes(this.elements.panel)
+      ) {
         return;
       }
       this.close();
@@ -2213,14 +2289,14 @@
      */
     _parseValue(raw) {
       if (!raw) return null;
-      const [family, name] = raw.split(':');
+      const [family, name] = raw.split(":");
       if (!family || !name || !ICON_FAMILIES[family]) return null;
       return { family, name };
     }
   }
 
-  if (!customElements.get('hui-icon-picker')) {
-    customElements.define('hui-icon-picker', HuiIconPicker);
+  if (!customElements.get("hui-icon-picker")) {
+    customElements.define("hui-icon-picker", HuiIconPicker);
   }
 
   exports.HuiIconPicker = HuiIconPicker;

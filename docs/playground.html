@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en" data-bs-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>HUI Icon Picker – Minimal Demo</title>
+
+    <!-- Google Fonts & Material Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Preload Material Icons font to prevent FOUC -->
+    <link rel="preload" as="style" crossorigin="anonymous"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0&display=block" />
+        <link rel="stylesheet" crossorigin="anonymous"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0&display=block">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&family=Space+Grotesk:wght@300..700&family=Ubuntu+Sans+Mono:ital,wght@0,400..700;1,400..700&display=swap"
+        rel="stylesheet">
+    <!-- Bootstrap Icon Font -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" crossorigin="anonymous">
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+
+    <style>
+      :root {
+        color-scheme: dark;
+      }
+
+      body {
+        min-height: 100vh;
+        background: radial-gradient(circle at top, #11162b, #05060d 60%);
+        color: #f2f4ff;
+        font-family: 'Space Grotesk', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      }
+
+      .demo-card {
+        backdrop-filter: blur(12px);
+        background: rgba(15, 18, 35, 0.8);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 0 25px 60px rgba(0, 0, 0, 0.45);
+      }
+
+      hui-icon-picker {
+        --hui-picker-accent: #7b5dff;
+        --hui-picker-border-radius: 18px;
+        --hui-picker-icon-size: 1.75rem;
+        width: 100%;
+      }
+
+      pre {
+        background: rgba(0, 0, 0, 0.35);
+        border-radius: 1rem;
+        color: #b7c5ff;
+        padding: 1.5rem;
+        min-height: 140px;
+      }
+
+      .event-log {
+        max-height: 220px;
+        overflow-y: auto;
+        font-family: 'JetBrains Mono', 'Ubuntu Mono', Consolas, monospace;
+        background: rgba(0, 0, 0, 0.35);
+        border-radius: 1rem;
+        padding: 1rem 1.25rem;
+      }
+
+      .event-log p {
+        margin: 0 0 0.35rem;
+        font-size: 0.9rem;
+      }
+
+      .material-symbols-rounded,
+      .material-icons {
+        font-family: 'Material Symbols Rounded' !important;
+        font-weight: normal !important;
+        font-style: normal !important;
+        font-size: 24px !important;
+        line-height: 1 !important;
+        letter-spacing: normal !important;
+        text-transform: none !important;
+        display: inline-block !important;
+        white-space: nowrap !important;
+        word-wrap: normal !important;
+        direction: ltr !important;
+        -webkit-font-feature-settings: 'liga' !important;
+        -webkit-font-smoothing: antialiased !important;
+        text-rendering: optimizeLegibility !important;
+        font-feature-settings: 'liga' !important;
+        vertical-align: middle !important;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="container py-5">
+      <section class="text-center mb-5">
+        <p class="text-uppercase text-info fw-semibold small mb-2">HUI Web Component</p>
+        <h1 class="display-5 fw-bold mb-3">Icon Picker Playground</h1>
+        <p class="lead text-muted mx-auto" style="max-width: 720px;">
+          This lightweight page loads the published <code>@huement/hui-icon-picker</code> bundle directly from the
+          repository’s <code>dist</code> folder so you can confirm the package works without the WaveDash demo shell.
+          Pick some icons, submit the form, and inspect the emitted values below.
+        </p>
+      </section>
+
+      <section class="card demo-card border-0 rounded-4 mb-4">
+        <div class="card-body p-4 p-lg-5">
+          <form id="picker-demo-form" class="vstack gap-4">
+            <div>
+              <label class="form-label text-uppercase text-white-50 small">Primary Icon</label>
+              <hui-icon-picker
+                id="primary-picker"
+                name="primary_icon"
+                value="bootstrap:rocket"
+                label="Primary icon"
+                placeholder="Choose any icon"
+              ></hui-icon-picker>
+              <div class="form-text text-white-50">Form-associated element (name/value will be included on submit).</div>
+            </div>
+
+            <div>
+              <label class="form-label text-uppercase text-white-50 small">Material Only</label>
+              <hui-icon-picker
+                id="material-picker"
+                name="material_icon"
+                families="material"
+                label="Material symbols"
+                placeholder="Material icon set only"
+              ></hui-icon-picker>
+            </div>
+
+            <div>
+              <label class="form-label text-uppercase text-white-50 small">Bootstrap Only (Disabled)</label>
+              <hui-icon-picker
+                id="disabled-picker"
+                families="bootstrap"
+                label="Disabled example"
+                placeholder="Disabled"
+                disabled
+              ></hui-icon-picker>
+              <div class="form-text text-white-50">Great for verifying disabled styling is inherited properly.</div>
+            </div>
+
+            <div class="d-flex flex-wrap gap-3">
+              <button type="submit" class="btn btn-primary px-4 py-2">
+                <i class="bi bi-clipboard-check me-2"></i>
+                Serialize Form Data
+              </button>
+              <button type="button" id="clear-log" class="btn btn-outline-light px-4 py-2">
+                <i class="bi bi-eraser me-2"></i>
+                Clear Event Log
+              </button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <div class="row gy-4">
+        <div class="col-lg-6">
+          <div class="h-100">
+            <h5 class="text-uppercase text-white-50 small mb-3">Live Events</h5>
+            <div id="event-log" class="event-log">
+              <p class="text-muted">Interact with the pickers to see events stream in.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="h-100">
+            <h5 class="text-uppercase text-white-50 small mb-3">Form Output</h5>
+            <pre id="form-output">Submit the form to see name/value pairs...</pre>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+    <script src="../dist/hui-icon-picker.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const form = document.getElementById('picker-demo-form');
+        const output = document.getElementById('form-output');
+        const log = document.getElementById('event-log');
+        const clearLogBtn = document.getElementById('clear-log');
+        const pickers = document.querySelectorAll('hui-icon-picker');
+
+        const timestamp = () => new Date().toLocaleTimeString();
+
+        function appendLog(message) {
+          const entry = document.createElement('p');
+          entry.innerHTML = `<span class="text-info small">[${timestamp()}]</span> ${message}`;
+          log.prepend(entry);
+          while (log.childElementCount > 12) {
+            log.lastElementChild?.remove();
+          }
+        }
+
+        function renderFormData() {
+          const data = new FormData(form);
+          if (!data.keys().next().value) {
+            output.textContent = 'Form has no data yet – submit after picking an icon.';
+            return;
+          }
+
+          const rows = [];
+          data.forEach((value, key) => {
+            rows.push(`${key}: ${value}`);
+          });
+          output.textContent = rows.join('\n');
+        }
+
+        form.addEventListener('submit', (event) => {
+          event.preventDefault();
+          renderFormData();
+          appendLog('<span class="text-success">Form submitted</span>');
+        });
+
+        pickers.forEach((picker) => {
+          picker.addEventListener('icon-select', (event) => {
+            const { family, name } = event.detail;
+            appendLog(`<span class="text-success">Selected</span> ${family}:${name}`);
+            renderFormData();
+          });
+
+          picker.addEventListener('icon-clear', () => {
+            appendLog('<span class="text-warning">Selection cleared</span>');
+            renderFormData();
+          });
+        });
+
+        clearLogBtn.addEventListener('click', () => {
+          log.innerHTML = '<p class="text-muted">Event log cleared.</p>';
+        });
+      });
+    </script>
+  </body>
+</html>

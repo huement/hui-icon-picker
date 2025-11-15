@@ -1,6 +1,6 @@
 {
   "name": "@huement/hui-icon-picker",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Accessible web component icon picker with Bootstrap Icons and Material Symbols support.",
   "main": "dist/hui-icon-picker.js",
   "directories": {
